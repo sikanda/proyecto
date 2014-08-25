@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%@ page import="Entidades.Proveedor" %>
+<%@ page import="Entidades.Usuario" %>
 <jsp:useBean id="globconfig" scope="application" class="Base.Config" />
-<jsp:useBean id="proveedorDB" scope="page" class="Datos.ProveedorDB" />
+<jsp:useBean id="usuarioDB" scope="page" class="Datos.UsuarioDB" />
 
 <%
 String mensaje = "";
@@ -22,22 +22,22 @@ if (request.getParameter("ref") != null) {
                 response.sendRedirect("inicioAdmin.jsp");
             }
  //         aca va si el user no es admin
-  //          else
-  //          {
- //               Unidad usu = unidadDB.loginUnidad(usuario,clave);
- //               if (usu != null)
-  //              {
-   //                 session.setMaxInactiveInterval(-1);
-  //                  session.setAttribute("unidad", usu);
-  //                  session.setAttribute("admin", 0);
- //                   response.sendRedirect("unidad.jsp");
- //               }
-//
- //               else
- //               {
-  //                  mensaje = "Por favor, verifique el usuario y clave ingresados.";
- //               }
- //           }
+            else
+            {
+                Usuario usu = usuarioDB.loginUsuario(usuario,clave);
+                if (usu != null)
+                {
+                    session.setMaxInactiveInterval(-1);
+                    session.setAttribute("usuario", usu);
+                    session.setAttribute("admin", 0);
+                    response.sendRedirect("inicioUsuario.jsp");
+                }
+
+                else
+                {
+                    mensaje = "Por favor, verifique el usuario y clave ingresados.";
+                }
+            }
       }
         else
         {
@@ -80,11 +80,11 @@ if (request.getParameter("ref") != null) {
                                                 <legend><strong>Ingrese sus datos</strong></legend>
                                                 <span id="label">Nombre de usuario:</span>
                                                 <br />
-                                                <label for="txtusuario"><input type="text" id="txtusuario" name="txtusuario" /></label>
+                                                <label for="txtusuario"><input type="text" id="txtusuario" name="txtusuario" value = "pepe"/></label>
                                                 <br />
                                                 <span id="label">Contraseña:</span>
                                                 <br />
-                                                <label for="txtclave"><input type="password" id="txtclave" name="txtclave" /></label>
+                                                <label for="txtclave"><input type="password" id="txtclave" name="txtclave" value ="1234" /></label>
                                                 <br />
                                                 <input class="button" type="submit" value="Ingresar" />
                                             </fieldset>

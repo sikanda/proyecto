@@ -4,7 +4,7 @@
 <%@ page import="Entidades.Proveedor"%>
 
 
-<%@ include file="WEB-INF/jspf/redirAdm.jspf" %>
+<%@ include file="WEB-INF/jspf/redirUsr.jspf" %>
 
 <jsp:useBean id="globconfig" scope="application" class="Base.Config" />
 <jsp:useBean id="proveedorDB" scope="page" class="Datos.ProveedorDB" />
@@ -16,6 +16,7 @@
         String telefono = "";
 	String direccion = "";
 	String mensajeE = "";
+        String titulo2 = "";
 
         if (request.getParameter("id") != null && request.getParameter("ae") == null ){
             try{
@@ -73,6 +74,11 @@
 			}
 		}
 	}
+        if (request.getParameter("id") != null || request.getParameter("ae") != null){
+                    titulo2 ="modificar Proveedor";
+                } else{
+                           titulo2 ="nuevo Proveedor";
+                       }
 %>
 
 
@@ -96,9 +102,10 @@
                                             <a href="#"><%= globconfig.nombrePag()%></a>
                                     </h1>
                                 </div>
+                                         <%@ include file="WEB-INF/jspf/barrausuario.jspf" %>
                      <div id="nav">
                                     <ul>
-                                        <li><p class="posicion"><a href="<%= response.encodeURL("listaProveedores.jsp?al=t")%>">Proveedores</a><%=globconfig.separador()%><a href="<%= response.encodeURL("nuevoProveedor.jsp")%>">Nuevo Proveedor</a></p></li>
+                                        <li><p class="posicion"><a href="<%= response.encodeURL("inicioUsuario.jsp")%>">inicio</a><%=globconfig.separador()%><a href="<%= response.encodeURL("listaProveedores.jsp?al=t")%>">Proveedores</a><%=globconfig.separador()%><%= titulo2%></a></p></li>
                                     </ul>
                                     <br class="clear" />
                                 </div>

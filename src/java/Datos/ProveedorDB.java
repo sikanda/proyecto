@@ -10,7 +10,7 @@ public class ProveedorDB extends AccesoDatos {
 public ProveedorDB() throws Exception{}
 
 	//Todo: agregar metodos custom, if necessary
-     public boolean save(Proveedor u){
+     public boolean save(Proveedor u){ 
         boolean rta = false;
 		rta = EjecutarNonQuery("insert into proveedores (nombreProv, apellidoProv, direProv, emailProv, telProv)  VALUES ( '" + u.getNombreProv()  + "' , '" + u.getApellidoProv() + "' , '" + u.getDireProv() + "' , '" + u.getEmailProv() + "' , '" + u.getTelProv() +  "' )");
 		if(rta){

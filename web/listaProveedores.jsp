@@ -4,7 +4,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
 
-<%@ include file="WEB-INF/jspf/redirAdm.jspf" %>
+<%@ include file="WEB-INF/jspf/redirUsr.jspf" %>
 
 <jsp:useBean id="globconfig" scope="application" class="Base.Config" />
 <jsp:useBean id="proveedorDB" scope="page" class="Datos.ProveedorDB" />
@@ -30,11 +30,11 @@
                                             <a href="#"><%= globconfig.nombrePag()%></a>
                                     </h1>
                                 </div>
-                   
+                        <%@ include file="WEB-INF/jspf/barrausuario.jspf" %>
                                 <div id="nav">
                                     <ul>
-                                        <li><p class="posicion"><a href="<%= response.encodeURL("listaProveedores.jsp")%>">Proveedores</a></p></li>
-                                    </ul>
+                                        <li><p class="posicion"><a href="<%= response.encodeURL("inicioUsuario.jsp")%>">inicio</a><%=globconfig.separador()%>proveedores</a></p></li>
+                                   </ul>
                                     <br class="clear" />
                                 </div>
                         </div>
@@ -72,7 +72,7 @@
                                                 <td style="text-align:center"><%= proveedores.get(i).getEmailProv()%></td>
                                                 <td style="text-align:center"><%= proveedores.get(i).getTelProv()%></td>
                                                 <td><a href="<%= response.encodeURL("nuevoProveedor.jsp?id=" + proveedores.get(i).getIdProveedor())%>">Modificar</a></td>
-                                                <td><a href="<%=  proveedorDB.delete(proveedores.get(i).getIdProveedor()) %>">Borrar</a></td>
+                                                <td><a href="<%= response.encodeURL("borrarProveedor.jsp?id=" + proveedores.get(i).getIdProveedor())%>">Borrar</a></td>
                                             </tr>
                                             <%
                                     }
@@ -86,7 +86,7 @@
                                                 <td style="text-align:center"><%= proveedores.get(i).getEmailProv()%></td>
                                                 <td style="text-align:center"><%= proveedores.get(i).getTelProv()%></td>
                                                 <td><a href="<%= response.encodeURL("nuevoProveedor.jsp?id=" + proveedores.get(i).getIdProveedor())%>">Modificar</a></td>
-                                                <td><a href="<%=  proveedorDB.delete(proveedores.get(i).getIdProveedor()) %>">Borrar</a></td>
+                                                <td><a href="<%= response.encodeURL("borrarProveedor.jsp?id=" + proveedores.get(i).getIdProveedor())%>">Borrar</a></td>
                                             </tr>
                                             <%
                                     }
