@@ -17,7 +17,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><%=globconfig.nombrePag() %></title>
-          <%@ include file="WEB-INF/jspf/estilo.jspf" %>
+ 
     </head>
     <body>
       <div id="bg">
@@ -46,42 +46,41 @@
 
                             <h2 id="titulo">Lista de rubros</h2>
                           
-                            <ul>
+                         
                                             <%
                                     List<Rubro> subrub = new ArrayList();   
                                     List<Rubro> subrub2 = new ArrayList(); 
                                             
                                 for (int i = 0; i < rub.size(); i++) {
                                        subrub = rub.get(i).getSubrubros();   %>
-                                           <ul>
-                                              <li style="text-align:center"><%= rub.get(i).getDescRubro()%>
-                                                  </ul>
+                                          
+                                      <%= rub.get(i).getDescRubro()%><br/>
+                                               
                                <%
                                 for (int j = 0; j < subrub.size(); j++) {
                                  %>
-                                            <ul>     
-                                            <li style="text-align:center"><%= subrub.get(j).getDescRubro() %>
-                                            </ul>
+                                                
+                                   <ul>   
+                                        <li>    <%= subrub.get(j).getDescRubro() %></li>
+                                          
                                             <%
-                                           
                                             subrub2 = subrub.get(j).getSubrubros();
                                               for (int k = 0; k < subrub2.size();k++) {
-                                                  
-                                                    
-                                              %>    
+                                             %>    
                                               
-                                           
-                                              <li style="text-align:center"><%= subrub2.get(k).getDescRubro() %></li> </li></li>
-                                              
+                                             
+                                             <ul><li> <%= subrub2.get(k).getDescRubro() %></li></ul>
+                                             
                                    <%                
                                     }
-
-               
+                                   %>
+                                     </ul>
+                               <% 
                                 }
                                   }          %>
-                                            </ul>
+                                           
                                    
-                                
+                               
                             </div>
             </div>
             </div>
