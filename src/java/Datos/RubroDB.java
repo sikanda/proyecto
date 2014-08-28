@@ -12,17 +12,18 @@ public RubroDB() throws Exception{}
        
           public List getRubrosConSubrubros() throws Exception{
              List listaRub = new ArrayList();
-              List<Rubro> listaSubRub = new ArrayList();
-              List<Rubro> listaSubSub = new ArrayList();
-              List<Rubro> listaSubSubSub = new ArrayList();
-              List<Rubro> listaSubSubSubSub = new ArrayList();
+              List<Rubro> listaSubRub; // = new ArrayList();
+              List<Rubro> listaSubSub; // = new ArrayList();
+              List<Rubro> listaSubSubSub; // = new ArrayList();
+              List<Rubro> listaSubSubSubSub; // = new ArrayList();
             
             ResultSet resultado = EjecutarQuery("select * from rubros where idrubropadre is null order by idRubro " );
             while (resultado.next()){
                 Rubro rub = new Rubro();
                 rub.setIdRubro(resultado.getString(1));
                 rub.setDescRubro(resultado.getString(2));
-                rub.setIdRubroPadre(resultado.getString(3));
+                //rub.setIdRubroPadre(resultado.getString(3));//idPadre no va mas
+                rub.setMateriales(rub.getMateriales());
                 //resultado tiene nivel 1 '003'
                 listaSubRub = buscaSubrubros(resultado.getString(1));
                 
@@ -41,27 +42,20 @@ public RubroDB() throws Exception{}
                                  //listaSubSubSubSub tiene nivel 4 '003001001001'    
                                  listaSubSubSubSub = buscaSubrubros(listaSubSubSub.get(k).getIdRubro());
                                  listaSubSubSub.get(k).setSubrubros(listaSubSubSubSub);  
-                                 System.out.println (listaSubSubSub.get(k).getIdRubro());
+                               //System.out.println (listaSubSubSub.get(k).getIdRubro());
                                 }
                     
-                  listaSubSub.get(i).setSubrubros(listaSubSubSub);     
-                 System.out.println (listaSubSub.get(j).getIdRubro());
+                  listaSubSub.get(j).setSubrubros(listaSubSubSub);     
+              //   System.out.println (listaSubSub.get(j).getIdRubro());
                     }
               
               listaSubRub.get(i).setSubrubros(listaSubSub); 
-              System.out.println (listaSubRub.get(i).getIdRubro());
+             // System.out.println (listaSubRub.get(i).getIdRubro());
          }
                
                 rub.setSubrubros(listaSubRub);
                 listaRub.add(rub);
             }
-//            listaRub = buscaRubrosPadre();
-//       
-//            for(int i=0; i< listaRub.size(); i++) {
-//             
-//              listaSubRub = buscaSubrubros(listaRub.get(i).getIdRubro());
-//            }
-            
 
             closeCon();
             return listaRub;
@@ -76,7 +70,7 @@ public RubroDB() throws Exception{}
                 Rubro rub = new Rubro();
                 rub.setIdRubro(resultado.getString(1));
                 rub.setDescRubro(resultado.getString(2));
-                rub.setIdRubroPadre(resultado.getString(3));
+               // rub.setIdRubroPadre(resultado.getString(3));
                 listaSub.add(rub);
             }
             //closeCon();
@@ -93,7 +87,7 @@ public RubroDB() throws Exception{}
                 Rubro rub = new Rubro();
                 rub.setIdRubro(resultado.getString(1));
                 rub.setDescRubro(resultado.getString(2));
-                rub.setIdRubroPadre(resultado.getString(3));
+              //  rub.setIdRubroPadre(resultado.getString(3));
                 listaSub.add(rub);
             }
 //            closeCon();

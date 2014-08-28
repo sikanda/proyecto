@@ -6,16 +6,18 @@ import java.util.List;
 public class Rubro { 
     private String idRubro;
     private String descRubro;
-    private String idRubroPadre;
-    private List subrubros;
+//    private String idRubroPadre;
+    private List<Rubro> subrubros ;
+    private List<Material> materiales ;
+    private List<ManoDeObra> manoDeObra ;
  
     public Rubro (){}
 	
 	
-    public Rubro(String idRubro, String descRubro, String idRubroPadre) {
+    public Rubro(String idRubro, String descRubro) {
         this.idRubro = idRubro;
         this.descRubro = descRubro;
-        this.idRubroPadre = idRubroPadre;
+//        this.idRubroPadre = idRubroPadre;
     }
 
     public String getIdRubro() {
@@ -34,13 +36,13 @@ public class Rubro {
         this.descRubro = descRubro;
     }
     
-    public void setIdRubroPadre(String idRubroPadre) {
-        this.idRubroPadre = idRubroPadre;
-    }
-
-    public String getIdRubroPadre() {
-        return idRubroPadre;
-    }
+//    public void setIdRubroPadre(String idRubroPadre) {
+//        this.idRubroPadre = idRubroPadre;
+//    }
+//
+//    public String getIdRubroPadre() {
+//        return idRubroPadre;
+//    }
 
     public List getSubrubros() {
         return subrubros;
@@ -48,6 +50,22 @@ public class Rubro {
 
     public void setSubrubros (List subrubros) {
         this.subrubros = subrubros;
+    }
+    
+        public List getMateriales() {
+        return materiales;
+    }
+
+    public void setMateriales (List materiales) {
+        this.materiales = materiales;
+    }
+    
+        public List getManoDeObra() {
+        return manoDeObra;
+    }
+
+    public void setManoDeObra (List manoDeObra) {
+        this.manoDeObra = manoDeObra;
     }
 
   /*
