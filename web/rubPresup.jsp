@@ -46,43 +46,50 @@
                             </div>
 
                             <h2 id="titulo">Lista de rubros</h2>
-                            <div id="jstree">
+                          <div id="jstree">
                          
-                                            <%
+                                     <%
                                     List<Rubro> subrub = new ArrayList();   
                                     List<Rubro> subrub2 = new ArrayList(); 
+                                     List<Rubro> subrub3 = new ArrayList(); 
                                             
-                                for (int i = 0; i < rub.size(); i++) {
-                                       subrub = rub.get(i).getSubrubros();   %>
+                                for (int i = 0; i < rub.size(); i++) { %>
                                           
                                       <%= rub.get(i).getDescRubro()%><br/>
                                                
                                <%
+                               subrub = rub.get(i).getSubrubros(); 
                                 for (int j = 0; j < subrub.size(); j++) {
                                  %>
                                                 
                                    <ul>   
-                                        <li id="child_node_1">    <%= subrub.get(j).getDescRubro() %></li>
-                                          
+                                        <li>    <%= subrub.get(j).getDescRubro() %></li>
+                                         
                                             <%
                                             subrub2 = subrub.get(j).getSubrubros();
                                               for (int k = 0; k < subrub2.size();k++) {
                                              %>    
-                                              
+                                             <ul>  
                                              
-                                             <ul><li> <%= subrub2.get(k).getDescRubro() %></li></ul>
+                                             <li> <%= subrub2.get(k).getDescRubro() %></li>
                                              
-                                   <%                
-                                    }
-                                   %>
+                                         <%    subrub3 = subrub2.get(k).getSubrubros();
+                                         
+                                              for (int m = 0; m < subrub3.size();m++) {
+                                             %>  
+                                    <ul><li> <%= subrub3.get(m).getDescRubro() %></li></ul>
+                                              <% 
+                                }%>
+                                   
                                      </ul>
+                                <%    }          %>
+                                   </ul>
                                <% 
                                 }
+                                
                                   }          %>
-                                           
-                                   
                                
-                            </div>
+                            </div>  
             </div>
             </div>
         </div>
