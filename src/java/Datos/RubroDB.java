@@ -2,6 +2,7 @@ package Datos;
 
 import Entidades.Rubro;
 import Entidades.Material;
+import Entidades.ManoDeObra;
 import java.sql.ResultSet;
 import java.util.*;
 
@@ -14,6 +15,8 @@ public RubroDB() throws Exception{}
       {
         List<Rubro>  listaRub = new ArrayList();
         List<Rubro>  listaSubRub ;
+        List<Material>  listaMat;
+        List<ManoDeObra>  listaMO;
 
        ResultSet resultado = EjecutarQuery("select * from rubros where idrubropadre is null order by idRubro " );
        while (resultado.next())
@@ -24,6 +27,12 @@ public RubroDB() throws Exception{}
 
            listaSubRub = buscaSubrubros(resultado.getString(1));
            rub.setSubrubros(listaSubRub);
+           
+            listaMat = getMaterialesEnRubro(resultado.getString(1));
+            rub.setMateriales(listaMat);
+
+            listaMO = getMOEnRubro(resultado.getString(1));
+            rub.setManoDeObra(listaMO);
 
            listaRub.add(rub);
         } 
@@ -36,6 +45,9 @@ public RubroDB() throws Exception{}
          public List buscaSubrubros(String idRubro) throws Exception{
             List<Rubro>  listaSub = new ArrayList();
             List<Rubro>  listaSubR;
+            List<Material>  listaMat;
+            List<ManoDeObra>  listaMO;
+            
             ResultSet resultado = EjecutarQuery("select r.idRubro,r.descRubro,r.idRubroPadre from rubros r inner join rubros r1 on r.idRubroPadre = r1.idrubro and r.idRubroPadre = " + idRubro );
             while (resultado.next()){
                 Rubro rub = new Rubro();
@@ -44,6 +56,13 @@ public RubroDB() throws Exception{}
 
                 listaSubR = buscaSubrubros(resultado.getString(1));
                 rub.setSubrubros(listaSubR);
+                
+                listaMat = getMaterialesEnRubro(resultado.getString(1));
+                rub.setMateriales(listaMat);
+                
+                listaMO = getMOEnRubro(resultado.getString(1));
+                rub.setManoDeObra(listaMO);
+                
                 listaSub.add(rub);
             }
             return listaSub;
@@ -63,8 +82,22 @@ public RubroDB() throws Exception{}
 
                 listaMat.add(mat);
             }
-            System.out.println(listaMat);
             return listaMat;
 	} 
-         
+      
+        /*metodo que busca la mano de obra para un id de rubro*/ 
+         public List getMOEnRubro(String idRubro) throws Exception{
+            List listaMO = new ArrayList();
+            ResultSet resultado = EjecutarQuery("select mr.idManoDeObra, mr.coefStdMo , m.descManoDeObra, m.idUnidadMedida from manodeobrarubro mr inner join  manodeobra m on mr.idManoDeObra = m.idManoDeObra where idrubro = " + idRubro );
+            while (resultado.next()){
+                ManoDeObra mo = new ManoDeObra();
+                mo.setIdManoDeObra(resultado.getString(1));
+                mo.setCoefStdMO(resultado.getFloat(2));
+                mo.setDescManoDeObra(resultado.getString(3));
+                mo.setIdUnidadMedida(resultado.getString(4));
+
+                listaMO.add(mo);
+            }
+            return listaMO;
+	} 
 }

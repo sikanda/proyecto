@@ -63,7 +63,9 @@
                                  %>
                                                 
                                    <ul>   
-                                        <li>    <%= subrub.get(j).getDescRubro() %></li>
+                                        <li>    <%= subrub.get(j).getDescRubro() %>
+                                         <ul><li> <%= subrub.get(j).getMateriales() %></li>
+                                                 <li> <%= subrub.get(j).getManoDeObra() %></li></ul></li>
                                          
                                             <%
                                             subrub2 = subrub.get(j).getSubrubros();
@@ -71,13 +73,19 @@
                                              %>    
                                              <ul>  
                                              
-                                             <li> <%= subrub2.get(k).getDescRubro() %></li>
+                                             <li> <%= subrub2.get(k).getDescRubro() %>
+                                             <ul><li> <%= subrub2.get(k).getMateriales() %></li>
+                                                 <li> <%= subrub2.get(k).getManoDeObra() %></li></ul></li>
                                              
                                          <%    subrub3 = subrub2.get(k).getSubrubros();
                                          
                                               for (int m = 0; m < subrub3.size();m++) {
                                              %>  
-                                    <ul><li> <%= subrub3.get(m).getDescRubro() %></li></ul>
+                                    <ul><li> <%= subrub3.get(m).getDescRubro() %>
+                                        
+                                      <ul><li> <%= subrub3.get(m).getMateriales() %></li>
+                                         <li> <%= subrub3.get(m).getManoDeObra() %></li></ul></li>
+                                    </ul>
                                               <% 
                                 }%>
                                    
