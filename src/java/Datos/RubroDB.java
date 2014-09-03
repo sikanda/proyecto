@@ -100,4 +100,31 @@ public RubroDB() throws Exception{}
             }
             return listaMO;
 	} 
+         
+           /*metodo que busca el padre directo para un idrubro*/ 
+         public String getRubroPadre(String idRubro) throws Exception{
+            String padre = new String();
+            ResultSet resultado = EjecutarQuery("select idRubroPadre from rubros where idRubro = " + idRubro );
+            while (resultado.next()){
+                padre = resultado.getString(1);
+            }
+            return padre;
+	} 
+         
+         
+         ///Obtiene un objeto rubro a partir del idRubro
+          public Rubro getRubro(String idRubro) throws Exception
+    {
+        Rubro r = new Rubro();
+        ResultSet resultado = EjecutarQuery("SELECT idRubro, descRubro, idUnidadMedida FROM rubros WHERE idRubro = " + idRubro);
+
+        while (resultado.next())
+        {
+            r.setIdRubro(idRubro);
+            r.setDescRubro(resultado.getString(2));
+            r.setIdUnidadMedida(resultado.getString(3));
+        }
+        resultado.close();
+        return r;
+    }	
 }

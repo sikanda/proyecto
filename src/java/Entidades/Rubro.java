@@ -6,7 +6,7 @@ import java.util.List;
 public class Rubro { 
     private String idRubro;
     private String descRubro;
-//    private String idRubroPadre;
+    private String idUnidadMedida;
     private List<Rubro> subrubros ;
     private List<Material> materiales ;
     private List<ManoDeObra> manoDeObra ;
@@ -17,7 +17,6 @@ public class Rubro {
     public Rubro(String idRubro, String descRubro) {
         this.idRubro = idRubro;
         this.descRubro = descRubro;
-//        this.idRubroPadre = idRubroPadre;
     }
 
     public String getIdRubro() {
@@ -36,14 +35,14 @@ public class Rubro {
         this.descRubro = descRubro;
     }
     
-//    public void setIdRubroPadre(String idRubroPadre) {
-//        this.idRubroPadre = idRubroPadre;
-//    }
-//
-//    public String getIdRubroPadre() {
-//        return idRubroPadre;
-//    }
+    public String getIdUnidadMedida() {
+        return idUnidadMedida;
+    }
 
+    public void setIdUnidadMedida(String idUnidadMedida) {
+        this.idUnidadMedida = idUnidadMedida;
+    }
+    
     public List getSubrubros() {
         return subrubros;
     }
@@ -67,7 +66,38 @@ public class Rubro {
     public void setManoDeObra (List manoDeObra) {
         this.manoDeObra = manoDeObra;
     }
-
+    
+    
+    public void addSubrubro(Rubro rubro)
+    {
+        this.subrubros.add(rubro);
+    }
+    
+        public void addHijo(Rubro padre, Rubro hijo)
+    {
+        padre.subrubros.add(hijo);
+    }
+     
+      	public String getIdRubroPadre(){ 
+		String idPadre = null;
+		try{
+			RubroDB rDB = new RubroDB();
+			idPadre = rDB.getRubroPadre(idRubro); //TODO: revisar
+		}
+		catch(Exception e){}
+                return idPadre;
+	}
+        
+        public Rubro getRubro(String idR){ 
+		Rubro rub = null;
+		try{
+			RubroDB rDB = new RubroDB();
+			rub = rDB.getRubro(idR); //TODO: revisar
+		}
+		catch(Exception e){}
+                return rub;
+	}
+    
   /*
         //TODO: faltan todos los otros metodos
          public boolean update(){
