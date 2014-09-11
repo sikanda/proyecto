@@ -12,6 +12,8 @@ public class Cliente {
     private String telCli;
     private Date fechaNacCli;
 
+     public Cliente (){}
+    
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }

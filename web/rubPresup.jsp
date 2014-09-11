@@ -1,3 +1,4 @@
+<%@page import="Entidades.Cliente"%>
 <%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -14,31 +15,42 @@
 <jsp:useBean id="presupuestoDB" scope="page" class="Datos.PresupuestoDB" />
 
 <%
+        boolean lala  ;
 	List<Rubro> rub = new ArrayList();
         List<Rubro> rubPresu = new ArrayList();
-	rub = rubroDB.getRubrosConSubrubros();
+        List<Rubro> rubPresuDev = new ArrayList();
+//	rub = rubroDB.getRubrosConSubrubros();
+        
+        Cliente c = new Cliente();
+        c.setIdCliente(1);
         
         Presupuesto p = new Presupuesto();
+        p.setCliente(c);
         p.setObservaciones("TEST");
         p.setUsuario((Usuario)session.getAttribute("usuario"));
+        
         p.setFechaCreacion(new Date());
         
         Rubro r1 = new Rubro();
         Rubro r2 = new Rubro();
         Rubro r3 = new Rubro();
         Rubro r4 = new Rubro(); 
-//        r1.setIdRubro("001002");
-//        r2.setIdRubro("002005");
-//        r3.setIdRubro("003001003003");
-//        r4.setIdRubro("003001008001");
+          
+//        rubPresu.add(r1.getRubro("001001"));
+//        rubPresu.add(r4.getRubro("002001"));
+        rubPresu.add(r1.getRubro("003001003"));
+        rubPresu.add(r4.getRubro("003001008"));
+        rubPresu.add(r2.getRubro("003001001001"));
+        rubPresu.add(r3.getRubro("003001001002"));    
         
-        rubPresu.add(r1.getRubro("001002"));
-        rubPresu.add(r2.getRubro("002003"));
-        rubPresu.add(r3.getRubro("003001003002"));
-        rubPresu.add(r4.getRubro("003001008001"));
         
+//        
         p.setRubros(rubPresu);
-        p.devolverRubrosPresupuesto();
+//        rubPresuDev = p.devolverRubrosPresupuesto();
+        
+        lala = p.save();
+        
+        //comment
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
  <head>

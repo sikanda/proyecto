@@ -6,6 +6,7 @@ public class Material {
     private String idUnidadMedida; 
     private float coefStdMat;
     private float cantPres;  
+    private float precioMat;
     
     public Material (){}
 
@@ -28,8 +29,15 @@ public class Material {
     public void setCantPres(float cantPres) {
         this.cantPres = cantPres;
     }
+    
+     public void setPrecioMat(float precioMat) {
+        this.precioMat = precioMat;
+    }
+     
+    public float getPrecioMat() {
+        return precioMat;
+    }
 
-  
     public String getIdMaterial() {
         return idMaterial;
     }

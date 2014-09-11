@@ -1,6 +1,10 @@
 
 package Datos;
 import Entidades.Presupuesto;
+import Entidades.Rubro;
+import Entidades.ManoDeObra;
+import Entidades.Material;
+import java.util.Iterator;
 
 public class PresupuestoDB extends AccesoDatos {
     
@@ -98,4 +102,55 @@ public class PresupuestoDB extends AccesoDatos {
 		closeCon();
         return rta;
     }
+        
+        public boolean saveALLPres(Presupuesto p){ 
+        boolean rta = false;
+        boolean rta1,rta2,rta3,rta4 ;
+       // Rubro r = new Rubro();
+       java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+       String fechaCreac = sdf.format(p.getFechaCreacion());
+        rta1 = EjecutarNonQuery("insert into presupuestos (observaciones, idUsuario, idCliente, fechaCreacion)  VALUES ( '" + p.getObservaciones()  + "' , " + p.getUsuario().getIdUsuario() + " , " + p.getCliente().getIdCliente()  + ", '" + fechaCreac +   "' )");
+        
+        int idPres = EjecutarQueryInt("SELECT MAX(idPresupuesto) FROM presupuestos");
+        
+           Iterator itRub = p.getRubros().iterator();
+           while(itRub.hasNext())
+           {
+                Rubro  r = (Rubro)itRub.next();
+                //OJO! esto sirve para rubros hoja... ni idea si vienen con los padres, hay q iterar en profundidad tb
+                rta4 = EjecutarNonQuery("INSERT INTO rubrospresupuesto (idPresupuesto,idRubro) VALUES (  " + idPres + " , '" + r.getIdRubro() +  "' )");
+                Iterator itMat = r.getMateriales().iterator();
+                while(itMat.hasNext())
+                {
+                    Material  ma = (Material)itMat.next();
+                    rta2 = EjecutarNonQuery("INSERT INTO materialespresupuesto (idPresupuesto,idRubro,idMaterial,cantPresMat)  VALUES ( " + idPres + " , '" + r.getIdRubro() + "' , '" + ma.getIdMaterial()  + "' , " +ma.getCantPres() +   " )");
+                    if(rta2 && rta4 && rta1)
+                    {
+                         rta = commit();
+                     }
+                     if(!(rta2 && rta4 && rta1))
+                     {
+                         rollback();
+                     }    
+                 }
+                Iterator itMo = r.getManoDeObra().iterator();
+                while(itMo.hasNext())
+                {
+                 ManoDeObra  mo = (ManoDeObra)itMo.next();    
+                 rta3 = EjecutarNonQuery("INSERT INTO manodeobrapresupuesto (idPresupuesto,idRubro,idManoDeObra,cantPresMO)  VALUES ( " + idPres + " , '" + r.getIdRubro() + "' , '" + mo.getIdManoDeObra()  + "' , " +mo.getCantPres() +   " )");
+                    if(rta3 && rta4 && rta1)
+                    {
+                        rta = commit();
+                    }
+                    if(!(rta3 && rta4 && rta1))
+                    {
+                        rollback();
+                    }
+                }
+           }       
+        // si no tiene mat y mo no hace falta hacer commit?
+        closeCon();
+        return rta;
+    }
+        
 }

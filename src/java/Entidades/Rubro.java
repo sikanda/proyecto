@@ -1,6 +1,7 @@
 package Entidades;
 
 import Datos.RubroDB;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rubro { 
@@ -17,6 +18,7 @@ public class Rubro {
     public Rubro(String idRubro, String descRubro) {
         this.idRubro = idRubro;
         this.descRubro = descRubro;
+        this.subrubros = new ArrayList();
     }
 
     public String getIdRubro() {
@@ -72,20 +74,15 @@ public class Rubro {
     {
         this.subrubros.add(rubro);
     }
-    
-        public void addHijo(Rubro padre, Rubro hijo)
-    {
-        padre.subrubros.add(hijo);
-    }
-     
-      	public String getIdRubroPadre(){ 
-		String idPadre = null;
-		try{
-			RubroDB rDB = new RubroDB();
-			idPadre = rDB.getRubroPadre(idRubro); //TODO: revisar
-		}
-		catch(Exception e){}
-                return idPadre;
+ 
+        public Rubro getRubroPadre(){ 
+            Rubro rPadre = null;
+            try{
+                    RubroDB rDB = new RubroDB();
+                    rPadre = rDB.getRubroPadre(idRubro); //TODO: revisar
+            }
+            catch(Exception e){}
+            return rPadre;
 	}
         
         public Rubro getRubro(String idR){ 

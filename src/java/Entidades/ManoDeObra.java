@@ -6,6 +6,7 @@ public class ManoDeObra {
     private String idUnidadMedida; 
     private float coefStdMO;
     private float cantPres;  
+    private float precioMo;
     
     public ManoDeObra (){}
 
@@ -29,6 +30,13 @@ public class ManoDeObra {
         this.cantPres = cantPres;
     }
 
+    public void setPrecioMo(float precioMo) {
+        this.precioMo = precioMo;
+    }
+    
+    public float getPrecioMo() {
+        return precioMo;
+    }   
   
     public String getIdManoDeObra() {
         return idManoDeObra;

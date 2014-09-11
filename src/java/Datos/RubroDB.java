@@ -11,6 +11,7 @@ public class RubroDB extends AccesoDatos {
 
 public RubroDB() throws Exception{}
 
+      //carga todos los rubros disponibles, con sus correspondientes subrubros, materiales y mano de obra
       public List getRubrosConSubrubros() throws Exception
       {
         List<Rubro>  listaRub = new ArrayList();
@@ -18,7 +19,7 @@ public RubroDB() throws Exception{}
         List<Material>  listaMat;
         List<ManoDeObra>  listaMO;
 
-       ResultSet resultado = EjecutarQuery("select * from rubros where idrubropadre is null order by idRubro " );
+       ResultSet resultado = EjecutarQuery("select idRubro, descRubro from rubros where idrubropadre is null order by idRubro " );
        while (resultado.next())
        {
            Rubro rub = new Rubro();
@@ -72,13 +73,14 @@ public RubroDB() throws Exception{}
          /*metodo que busca los materiales para un id de rubro*/ 
          public List getMaterialesEnRubro(String idRubro) throws Exception{
             List listaMat = new ArrayList();
-            ResultSet resultado = EjecutarQuery("select mr.idMaterial, mr.coefStdMat , m.descMaterial, m.idUnidadMedida from materialesrubro mr inner join  materiales m on mr.idMaterial = m.idMaterial where idrubro = " + idRubro );
+            ResultSet resultado = EjecutarQuery("select mr.idMaterial, mr.coefStdMat , m.descMaterial, m.idUnidadMedida, m.precioMa from materialesrubro mr inner join  materiales m on mr.idMaterial = m.idMaterial where idrubro = " + idRubro );
             while (resultado.next()){
                 Material mat = new Material();
                 mat.setIdMaterial(resultado.getString(1));
                 mat.setCoefStdMat(resultado.getFloat(2));
                 mat.setDescMaterial(resultado.getString(3));
                 mat.setIdUnidadMedida(resultado.getString(4));
+                mat.setPrecioMat(resultado.getFloat(5));
 
                 listaMat.add(mat);
             }
@@ -88,31 +90,39 @@ public RubroDB() throws Exception{}
         /*metodo que busca la mano de obra para un id de rubro*/ 
          public List getMOEnRubro(String idRubro) throws Exception{
             List listaMO = new ArrayList();
-            ResultSet resultado = EjecutarQuery("select mr.idManoDeObra, mr.coefStdMo , m.descManoDeObra, m.idUnidadMedida from manodeobrarubro mr inner join  manodeobra m on mr.idManoDeObra = m.idManoDeObra where idrubro = " + idRubro );
+            ResultSet resultado = EjecutarQuery("select mr.idManoDeObra, mr.coefStdMo , m.descManoDeObra, m.idUnidadMedida, m.precioMo from manodeobrarubro mr inner join  manodeobra m on mr.idManoDeObra = m.idManoDeObra where idrubro = " + idRubro );
             while (resultado.next()){
                 ManoDeObra mo = new ManoDeObra();
                 mo.setIdManoDeObra(resultado.getString(1));
                 mo.setCoefStdMO(resultado.getFloat(2));
                 mo.setDescManoDeObra(resultado.getString(3));
                 mo.setIdUnidadMedida(resultado.getString(4));
+                mo.setPrecioMo(resultado.getFloat(5));
 
                 listaMO.add(mo);
             }
             return listaMO;
 	} 
          
-           /*metodo que busca el padre directo para un idrubro*/ 
-         public String getRubroPadre(String idRubro) throws Exception{
-            String padre = new String();
-            ResultSet resultado = EjecutarQuery("select idRubroPadre from rubros where idRubro = " + idRubro );
+
+         
+         /*metodo que busca el objeto padre directo para un idrubro*/ 
+         public Rubro getRubroPadre(String idRubro) throws Exception{
+            Rubro padre = new Rubro();
+            ResultSet resultado = EjecutarQuery("select rp.idRubro, rp.descRubro, rp.idUnidadMedida  from rubros r inner join rubros rp on rp.idRubro = r.idRubroPadre where r.idRubro = " + idRubro );
             while (resultado.next()){
-                padre = resultado.getString(1);
+                padre.setIdRubro(resultado.getString(1));
+                padre.setDescRubro(resultado.getString(2));
+                padre.setIdUnidadMedida(resultado.getString(3));
+                padre.setSubrubros(new ArrayList());    //esta vacio pq lo uso pal presup, la carga de all available subr is pointless
+                padre.setMateriales(getMaterialesEnRubro(resultado.getString(1)));
+                padre.setManoDeObra(getMOEnRubro(resultado.getString(1)));
             }
             return padre;
-	} 
+	}      
          
-         
-         ///Obtiene un objeto rubro a partir del idRubro
+      
+        ///Obtiene un objeto rubro a partir del idRubro
           public Rubro getRubro(String idRubro) throws Exception
     {
         Rubro r = new Rubro();
@@ -123,6 +133,9 @@ public RubroDB() throws Exception{}
             r.setIdRubro(idRubro);
             r.setDescRubro(resultado.getString(2));
             r.setIdUnidadMedida(resultado.getString(3));
+            r.setSubrubros(new ArrayList()); //ojo q esto borra la lista de rubr
+            r.setMateriales(getMaterialesEnRubro(idRubro));
+            r.setManoDeObra(getMOEnRubro(idRubro));
         }
         resultado.close();
         return r;

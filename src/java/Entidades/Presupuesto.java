@@ -41,7 +41,9 @@ public class Presupuesto {
     {
         this.rubros.add(rubro);
     }
-          
+     // <editor-fold defaultstate="collapsed" desc="class attributes">
+   
+   
     public int getIdPresupuesto() {
         return idPresupuesto;
     }
@@ -90,45 +92,43 @@ public class Presupuesto {
         this.cliente = cliente;
     }
     
+   // </editor-fold>  
     
-    public List devolverRubrosPresupuesto()
+       public List devolverRubrosPresupuesto()
     {
+        Rubro a;
+        boolean flag;
         List lista = new ArrayList();
-        int len;
-        Rubro p,p1,p2 ;    
-        for(Rubro r : rubros){
-//            len = (r.getIdRubro()).length();
-//            switch(len) {
-//            case 3: //L1
-//                lista.add(r);
-//                break;  
-//            case 6: //L2
-                p = r.getRubro(r.getIdRubroPadre()); //TODO: REVISAR
-    //            p.addHijo(p,r);
-                lista.add(p);
-//                break;
-//             case 9: //L3
-//                p = r.getRubro(r.getIdRubroPadre()); //r tiene L3, p tiene L2
-//                p.addRubro(r); //p L2 agrega su hijo L3
-//                p1 = p.getRubro(p.getIdRubroPadre()); //padre de p es p1 = L1
-//                p1.addRubro(p); //p1 L1 agrega su hijo L2
-//                lista.add(p1);  //agrego p1 L1 a la lista
-//                break;
-//             case 12: //L4
-//                p = r.getRubro(r.getIdRubroPadre()); //r tiene L4, p tiene L3
-//                p.addRubro(r); //p L3 agrega su hijo L4
-//                p1 = p.getRubro(p.getIdRubroPadre()); //padre de p es p1 = L2
-//                p1.addRubro(p); //p1 L2 agrega su hijo L3
-//                p2 = p1.getRubro(p1.getIdRubroPadre()); //padre de p1 es p2 = L1
-//                p2.addRubro(p1); //p2 L1 agrega su hijo L2 
-//                lista.add(p2);  //agrego p2 L1 a la lista
-//                break;
-//                }
+        for(Rubro r : rubros)
+        {
+         flag = true;   
+         Rubro pad = r.getRubroPadre();   	 
+         while ((pad.getIdRubro() != null)&&(flag))
+	{
+            if (enLista(pad,lista)) 
+            {
+                a= deLista(pad,lista);  
+                a.addSubrubro(r);  
+                flag = false;
+            }
+            else 
+            {
+                 pad.addSubrubro(r); 
+            }
+            r = pad; 
+            pad =  pad.getRubroPadre(); 
+
         }
-        return lista;
+            if (flag)
+            {
+             lista.add(r);
+            }
+        }
+         return lista;
     }
-    
-    
+    	 
+
+  
       public boolean save(){
         boolean rta = true;
         PresupuestoDB PDB = null;
@@ -139,9 +139,50 @@ public class Presupuesto {
             rta = false;
         }
         if(rta){
-                rta = PDB.save(this) ;
-                //rta = PDB.savePresupuesto(this) ;
+                //rta = PDB.save(this) ;
+                rta = PDB.saveALLPres(this) ;
         }
         return rta;
     }
+      
+        // determina si un objeto rubro esta en la lista
+        // es recursiva para buscar en los subrubros de los rubros de la lista
+      public boolean enLista(Rubro r, List<Rubro> lista)
+      {
+          boolean esta = false;
+          for(int i=0; i<lista.size();i++)
+          { 
+            if (r.getIdRubro().equals(lista.get(i).getIdRubro()))
+               {
+                   esta = true;
+                   break;
+               }
+            if ((!esta) && (!lista.get(i).getSubrubros().isEmpty())) 
+                {
+                    esta = enLista(r,lista.get(i).getSubrubros());
+                }
+          }
+          return esta;
+      }
+          
+         // devuelve el objeto rubro de la lista
+        // es recursiva para buscar en los subrubros de los rubros de la lista
+      public Rubro deLista(Rubro r, List<Rubro> lista)
+      {
+          Rubro este = new Rubro();
+          for(int i=0; i<lista.size();i++)
+          { 
+            if (r.getIdRubro().equals(lista.get(i).getIdRubro()))
+               {
+                   este = lista.get(i) ;
+                   break;
+               }
+            if (( este!= null ) && (!lista.get(i).getSubrubros().isEmpty())) //no esta y subr no esta vacio
+                {
+                    este = deLista(r,lista.get(i).getSubrubros());
+                }
+          }
+          return este;
+      }
+       
 }
