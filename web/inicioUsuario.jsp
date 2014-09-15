@@ -33,7 +33,7 @@
                                                <br>
                                                <br>
                                             <a href="listaRubros.jsp"> test lista rubros</a><br>
-                                             <a href="rubPresup.jsp"> test arbol</a><br>
+                                             <a href="pantallaDos.jsp"> Test Pantalla DOS</a><br>
                                       </fieldset>
                              </form>
                         </div>
