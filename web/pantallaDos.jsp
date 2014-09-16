@@ -35,7 +35,10 @@
         
         p.setFechaCreacion(new Date());
         
-        Rubro r1,r2,r3,r4 = new Rubro();
+        Rubro r1 = new Rubro();
+        Rubro r2 = new Rubro();
+        Rubro r3 = new Rubro();
+        Rubro r4 = new Rubro(); 
           
         rubPresu.add(r1.getRubro("001001"));
         rubPresu.add(r4.getRubro("002001"));
