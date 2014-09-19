@@ -42,8 +42,8 @@
           
         rubPresu.add(r1.getRubro("001001"));
         rubPresu.add(r4.getRubro("002001"));
-        rubPresu.add(r2.getRubro("003001003"));
         rubPresu.add(r3.getRubro("003001001002"));    
+        rubPresu.add(r2.getRubro("009001"));
      
         p.setRubros(rubPresu);
         rubPresuDev = p.devolverRubrosPresupuesto();
@@ -62,22 +62,66 @@
 
 <script>
 $(function() {
-    alert('jq carga ok');
-//$("#myTable td.edit").click(function() {     // function_td
-  //$(this).css("font-weight","bold");
- //  alert($(this).text());
- //});
-  
+   
+   $("#myTable td.unit").each(function() {
+    if ($(this).text().length !== 0)
+         {
+             ($(this).prev()).text("1");
+             ($(this).prev()).addClass("edit");
+         }
+});
+
+$('td:nth-child(4)').hide(); //rubros
+$('td:nth-child(5)').hide(); //valores originales
+
+$("#myTable td:nth-child(4)").each(function(){
+switch($(this).text().length) {
+ case 6:
+  (($(this)).prev().prev().prev()).css("text-indent","15px");
+  break;
+   case 9:
+   (($(this)).prev().prev().prev()).css("text-indent","30px");
+  break;
+ case 12:
+   ($(this)).prev().prev().prev().css("text-indent","45px");
+  break;
+} 
+});
+
+
  $("#myTable td.edit").click(function() { 
+   //  console.log($(this)) ;
         var text = $(this).text();
+        var rub = $(this).next().next().text();
+        var tieneClase = $(this).next().hasClass("unit");
         $(this).text('');
-        $('<input type="text" />').appendTo($(this)).val(text).select().blur(
-            function(){
+        $('<input type="text" id="txt" style="width: 40px;" />').appendTo($(this)).val(text).select().keypress(function(e) {
+            if(e.keyCode === 13 || e.keyCode === 9)  {
                 var newText = $(this).val();
                 $(this).parent().text(newText).find('input:text').remove();
+ 
+      if(tieneClase){ //alert ("tiene clase");
+            
+                 $("#myTable td.hidRub").each(function() {
+                   if ($(this).text() === rub   )
+                    {   //this es col 4 de rubro
+                         var oldVal = $(this).next().text(); //5ta col tiene val sin modif
+                         $(this).prev().prev().text(oldVal * newText);
+                    }
+                });
+              }//tiene clase
+           } //key code
+    } );
+    
+    
+       $("#txt").blur(
+                function(){
+                var newText = text;
+             $(this).parent().text(newText).find('input:text').remove();
            });
     });
-});
+ });
+
 </script>
     </head>
           <body>
@@ -99,11 +143,12 @@ $(function() {
                       </div>
                       <div id="main">
                           <h2 id="titulo">Editar cantidades</h2>
+                          <h3 >Haga click en las cantidades para editarlas</h3>
                           <div id="tabla">                  
                               <table id="myTable" >
                                   <tbody>
-                                      <tr><th>Descripcion</th><th>Unidad</th><th>Cantidad</th></tr>
-                                              <c:forEach items="${requestScope.rubros}" var="rub">
+                                      <tr><th style="width: 300px;">Descripcion</th><th>Cantidad</th><th>Unidad</th></tr>
+                                              <c:forEach items="${requestScope.rubros}" var="rub" >
                                                   <myTags:displayRubros rub="${rub}"/> 
                                               </c:forEach>
                                   </tbody>
