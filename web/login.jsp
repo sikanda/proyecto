@@ -67,9 +67,9 @@ if (request.getParameter("ref") != null) {
                                             <a href="#">Sistema de presupuesto de obras civiles</a>
                                     </h1>
                                 </div>
-                                <!--  <div id="banner">
-                                    <img src="estilos/images/pic1.jpg" width="932" height="172" alt="" />
-                                </div>-->
+                                <div  >
+                                    <img src="images/pic1.jpg" width="650" height="231" alt="" />
+                                </div>
 
                                         <h2>Ingresar al Sistema</h2>
                                          <% if (!mensaje.isEmpty()) {%>
@@ -91,7 +91,7 @@ if (request.getParameter("ref") != null) {
                                         </form>
                         </div>
                 </div>
-           
+                 <%@ include file="WEB-INF/jspf/firma.jspf" %>
         </div>
     </body>
 </html>

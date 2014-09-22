@@ -37,7 +37,7 @@ public class Presupuesto {
         }
      }
     
-     public void addRubroPres(Rubro rubro)
+     public void addRubroPres(Rubro rubro) //este rubro es un rubro hoja
     {
         this.rubros.add(rubro);
     }

@@ -16,14 +16,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <jsp:useBean id="globconfig" scope="application" class="Base.Config" />
-
+<%-- <jsp:useBean id="presupuestoBean" class="Entidades.Presupuesto"  scope="session"/> --%>
 
 <%
-        boolean lala  ;
-	List<Rubro> rub = new ArrayList();
         List<Rubro> rubPresu = new ArrayList();
         List<Rubro> rubPresuDev = new ArrayList();
-//	rub = rubroDB.getRubrosConSubrubros();
         
         Cliente c = new Cliente();
         c.setIdCliente(1);
@@ -47,9 +44,8 @@
      
         p.setRubros(rubPresu);
         rubPresuDev = p.devolverRubrosPresupuesto();
-        
-        
-         request.setAttribute("rubros", rubPresuDev);
+          
+         session.setAttribute("rubros", rubPresuDev);
         
        
   %>   
@@ -144,19 +140,25 @@ switch($(this).text().length) {
                       <div id="main">
                           <h2 id="titulo">Editar cantidades</h2>
                           <h3 >Haga click en las cantidades para editarlas</h3>
-                          <div id="tabla">                  
-                              <table id="myTable" >
-                                  <tbody>
-                                      <tr><th style="width: 300px;">Descripcion</th><th>Cantidad</th><th>Unidad</th></tr>
-                                              <c:forEach items="${requestScope.rubros}" var="rub" >
-                                                  <myTags:displayRubros rub="${rub}"/> 
-                                              </c:forEach>
-                                  </tbody>
-                              </table>
+                          <div id="formu">
+                              <form name="frmEditaCants" action="pantallaTres.jsp">
 
-                          </div>         
+
+                                  <div id="tabla">                  
+                                      <table id="myTable" >
+                                          <tbody>
+                                              <tr><th style="width: 300px;">Descripcion</th><th>Cantidad</th><th>Unidad</th></tr>
+                                                      <c:forEach items="${sessionScope.rubros}" var="rub" >
+                                                          <myTags:displayRubros rub="${rub}"/> 
+                                                      </c:forEach>
+                                          </tbody>
+                                      </table>
+
+                                  </div>
+                                  <input type="submit" value="Siguiente" />
+                               </form>
+                          </div>
                       </div>
                   </div>
-              </div>
           </body>
 </html>

@@ -80,7 +80,7 @@ public RubroDB() throws Exception{}
                 mat.setCoefStdMat(resultado.getFloat(2));
                 mat.setDescMaterial(resultado.getString(3));
                 mat.setIdUnidadMedida(resultado.getString(4));
-                mat.setPrecioMat(resultado.getFloat(5));
+                mat.setPrecioMa(resultado.getFloat(5));
 
                 listaMat.add(mat);
             }

@@ -11,6 +11,7 @@ public class Rubro {
     private List<Rubro> subrubros ;
     private List<Material> materiales ;
     private List<ManoDeObra> manoDeObra ;
+    private float cantPresRub;
  
     public Rubro (){}
 	
@@ -40,7 +41,15 @@ public class Rubro {
     public String getIdUnidadMedida() {
         return idUnidadMedida;
     }
+    
+    public float getCantPresRub() {
+        return cantPresRub;
+    }
 
+    public void setCantPresRub(float cantPresRub) {
+        this.cantPresRub = cantPresRub;
+    }
+    
     public void setIdUnidadMedida(String idUnidadMedida) {
         this.idUnidadMedida = idUnidadMedida;
     }
