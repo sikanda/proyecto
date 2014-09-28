@@ -18,6 +18,7 @@ public class PresupuestoDB extends AccesoDatos {
         public boolean saveALLPres(Presupuesto p){ 
         boolean rta = false;
         boolean rta1,rta2,rta3,rta4 ;
+        boolean flag = true;
        // Rubro r = new Rubro();
        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
        String fechaCreac = sdf.format(p.getFechaCreacion());
@@ -29,6 +30,8 @@ public class PresupuestoDB extends AccesoDatos {
            while(itRub.hasNext())
            {
                 Rubro  r = (Rubro)itRub.next();
+                System.out.println( r.getIdRubro()); 
+                 flag = true;
                 //OJO! esto sirve para rubros hoja... no puede venir con los padres, sino hay q iterar en profundidad tb
                 rta4 = EjecutarNonQuery("INSERT INTO rubrospresupuesto (idPresupuesto,idRubro,cantPresRub) VALUES (  " + idPres + " , '" + r.getIdRubro() +  "' , " +r.getCantPresRub() + " )");
                 Iterator itMat = r.getMateriales().iterator();
@@ -39,6 +42,8 @@ public class PresupuestoDB extends AccesoDatos {
                     if(rta2 && rta4 && rta1)
                     {
                          rta = commit();
+                         flag = false;
+                         // System.out.println("commit ma");
                      }
                      if(!(rta2 && rta4 && rta1))
                      {
@@ -53,14 +58,24 @@ public class PresupuestoDB extends AccesoDatos {
                     if(rta3 && rta4 && rta1)
                     {
                         rta = commit();
+                         flag = false;
+                        // System.out.println("commit mo");
                     }
                     if(!(rta3 && rta4 && rta1))
                     {
                         rollback();
                     }
                 }
-           }       
-        // si no tiene mat y mo no hace falta hacer commit?
+           }    
+            if(rta1 && flag)
+            {
+                 rta = commit();
+                 //System.out.println("commit rta y flag");
+             }
+            if(!(rta1 && flag))
+            {
+                rollback();
+            }
         closeCon();
         return rta;
     }

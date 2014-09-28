@@ -37,16 +37,21 @@
         Rubro r3 = new Rubro();
         Rubro r4 = new Rubro(); 
           
-        rubPresu.add(r1.getRubro("001001"));
-        rubPresu.add(r4.getRubro("002001"));
-        rubPresu.add(r3.getRubro("003001001002"));    
-        rubPresu.add(r2.getRubro("009001"));
+     //   rubPresu.add(r1.getRubro("001001"));
+     //   rubPresu.add(r4.getRubro("003001001002"));
+      //  rubPresu.add(r3.getRubro("009001"));    
+
+        rubPresu.add(r3.getRubro("004017"));
+        rubPresu.add(r1.getRubro("018"));      
+        rubPresu.add(r2.getRubro("022004"));
+        rubPresu.add(r4.getRubro("025"));
      
-        p.setRubros(rubPresu);
+        p.setRubros(rubPresu); //voy a setearle los q esten en sesion. presupuesto tiene array de rubros leaf.
         rubPresuDev = p.devolverRubrosPresupuesto();
-          
-         session.setAttribute("rubros", rubPresuDev);
         
+         session.setAttribute("rubrosLeaf", rubPresu); //esto me lo pasa la pantalla 1, solo rubros leaf.
+         session.setAttribute("rubrosEnArbol", rubPresuDev); //usado por la pantalla 2
+         session.setAttribute("presupuestoActual", p);
        
   %>   
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,16 +62,25 @@
           <script src="js/jquery-1.6.4.min.js" ></script>	
 
 <script>
-$(function() {
    
-   $("#myTable td.unit").each(function() {
-    if ($(this).text().length !== 0)
-         {
-             ($(this).prev()).text("1");
-             ($(this).prev()).addClass("edit");
-         }
+$(function() {
+//evitar q se submita el form con enter
+$('#frmEditaCants').bind("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code  === 13) {               
+    e.preventDefault();
+    return false;
+  }
 });
 
+   $("#myTable td.unit").each(function() {
+    if ($(this).text().length === 0)
+       {
+         $(this).prev().find('input:text').remove();
+
+       }
+});
+ 
 $('td:nth-child(4)').hide(); //rubros
 $('td:nth-child(5)').hide(); //valores originales
 
@@ -85,37 +99,27 @@ switch($(this).text().length) {
 });
 
 
- $("#myTable td.edit").click(function() { 
-   //  console.log($(this)) ;
-        var text = $(this).text();
-        var rub = $(this).next().next().text();
-        var tieneClase = $(this).next().hasClass("unit");
-        $(this).text('');
-        $('<input type="text" id="txt" style="width: 40px;" />').appendTo($(this)).val(text).select().keypress(function(e) {
-            if(e.keyCode === 13 || e.keyCode === 9)  {
-                var newText = $(this).val();
-                $(this).parent().text(newText).find('input:text').remove();
- 
-      if(tieneClase){ //alert ("tiene clase");
-            
-                 $("#myTable td.hidRub").each(function() {
+ $("#myTable input.edit").keypress(function(e) {
+  if(e.keyCode === 13 || e.keyCode === 9)  {//termina edicion
+      //parent es el td del input, next es el td de uM
+            var tieneClase = $(this).parent().next().hasClass("unit");   
+            var newText = $(this).val();
+            var rub = $(this).parent().next().next().text();
+  
+            if(tieneClase){  //se esta editando un rubro leaf
+                   $("#myTable td.hidRub").each(function() { //para los mismos mat o mo dentro del rubro q se edita
                    if ($(this).text() === rub   )
                     {   //this es col 4 de rubro
                          var oldVal = $(this).next().text(); //5ta col tiene val sin modif
-                         $(this).prev().prev().text(oldVal * newText);
+                         $(this).prev().prev().find('input:text').val(oldVal * newText);
                     }
                 });
-              }//tiene clase
-           } //key code
-    } );
-    
-    
-       $("#txt").blur(
-                function(){
-                var newText = text;
-             $(this).parent().text(newText).find('input:text').remove();
-           });
-    });
+                }//tiene clase*/
+             // anda 
+             $("#myTable td.unit").prev().find('input:text').blur();
+        } 
+   } );
+   $("#myTable td.unit:contains('PORC')").text("%"); 
  });
 
 </script>
@@ -139,16 +143,15 @@ switch($(this).text().length) {
                       </div>
                       <div id="main">
                           <h2 id="titulo">Editar cantidades</h2>
-                          <h3 >Haga click en las cantidades para editarlas</h3>
                           <div id="formu">
-                              <form name="frmEditaCants" action="pantallaTres.jsp">
+                              <form name="frmEditaCants" id="frmEditaCants" action="pantallaTres.jsp" method="POST" autocomplete="on">
 
 
                                   <div id="tabla">                  
                                       <table id="myTable" >
                                           <tbody>
                                               <tr><th style="width: 300px;">Descripcion</th><th>Cantidad</th><th>Unidad</th></tr>
-                                                      <c:forEach items="${sessionScope.rubros}" var="rub" >
+                                                      <c:forEach items="${sessionScope.rubrosEnArbol}" var="rub" >
                                                           <myTags:displayRubros rub="${rub}"/> 
                                                       </c:forEach>
                                           </tbody>
