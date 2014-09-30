@@ -12,6 +12,17 @@
 <%
 	List<Rubro> rub = new ArrayList();
 	rub = rubroDB.getRubrosConSubrubros();
+        String[] listaIds = null;
+        
+        //string of IDS
+       if (request.getParameter("ids") != null){
+           String cadena = request.getParameter("ids").toString();
+           listaIds = cadena.split("_");
+           session.setAttribute("listaIds", listaIds);
+           response.sendRedirect(response.encodeRedirectURL("pantallaDos.jsp"));
+       }
+          
+        
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -19,16 +30,14 @@
         <title><%=globconfig.nombrePag() %></title>
  
 <link href="dist/themes/default/style.min.css" rel="stylesheet" type="text/css" title="Estilo"/>
-<style type="text/css">
+<style type="text/css"> /* This makes only leaves have checkboxes */
     #jstree .jstree-open > .jstree-anchor > .jstree-checkbox, 
     #jstree .jstree-closed > .jstree-anchor > .jstree-checkbox { display:none; }
 </style>
     </head>
     <body>
       <div id="bg">
-
             <div id="outer">
-
                         <div id="header">
                                 <div id="logo">
                                     <h1>
@@ -43,14 +52,26 @@
                                     <br class="clear" />
                                 </div>
                         </div>
+                                   
+                                   
     <div id="main">
-
-                            <div id="opciones">
-                           
-                            </div>
-
                             <h2 id="titulo">Lista de rubros</h2>
-                             <button>Agregar</button>
+                            <br></br>
+                           <%
+//                            if (listaIds!= null){
+//                            for (int p=0; p<listaIds.length; p++){
+//                                %>
+//                                <%=listaIds[p] %>                              
+//                                <%
+//                            }
+//                            }
+                            %> 
+                            <br></br>
+                            <button id="mostrar">Mostrar</button>
+                             <form id="formulario">
+                                 <input type="hidden" id="rubrosIds" name="ids" value=""/>
+                                 <input type="submit" value="Siguiente" />
+                             </form>
                              
                              <div id="event_result"></div>
                              <br></br>
@@ -112,24 +133,11 @@ $(function () {
                                      },
                         "plugins" : [ "checkbox" ]
                         });   
-});
- 			
+}); 		
 //bind to events triggered on the tree
 $('#jstree').on("changed.jstree", function (e, data) {
   console.log(data.selected);
-});    
-
-/* EXPERIMENT
-$('#jstree')
-  // listen for event
-  .on('changed.jstree', function (e, data) {
-    var i, j, r = [];
-    for(i = 0, j = data.selected.length; i < j; i++) {
-      r.push(data.instance.get_node(data.selected[i]).text);
-    }
-    $('#event_result').html('Selected:<br/> '+ r.join(', '));
-  })
-*/
+});   
 
 //Stops the propagation of the selection of the nodes to their leaves
 $('#jstree').on("select_node.jstree deselect_node.jstree", function (e, data) {
@@ -141,16 +149,10 @@ $('#jstree').on("select_node.jstree deselect_node.jstree", function (e, data) {
     }
 })
 
-/* $('#jstree').on('select_node.jstree', function (e, data) {
-            if (data.node.children.length > 0) {
-                $('#jstree').jstree(true).deselect_node(data.node);                    
-                $('#jstree').jstree(true).toggle_node(data.node);                    
-            }
-        })*/
-
-$('button').on('click', function (){
+$('#mostrar').on('click', function (){
 var selectedElmsNames = [];
 var selectedElmsIds = [];
+var elem = document.getElementById("rubrosIds");
 var selectedElms = $('#jstree').jstree("get_selected", true);
 $.each(selectedElms, function() {
     if(this.children.length > 0 === false) //CHECK IF NODE IS LEAF
@@ -158,7 +160,9 @@ $.each(selectedElms, function() {
          selectedElmsIds.push(this.id);
         }
 });
+elem.value =selectedElmsIds.join('_'); // Change field
 $('#event_result').html('Selected:<br/> '+ selectedElmsNames.join(', '));
+
 })
 
 
