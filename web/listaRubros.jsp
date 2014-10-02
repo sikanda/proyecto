@@ -9,20 +9,44 @@
 <jsp:useBean id="globconfig" scope="application" class="Base.Config" />
 <jsp:useBean id="rubroDB" scope="page" class="Datos.RubroDB" />
 
+<%!
+public Rubro getRubroByCode(String idRubro, List<Rubro> lista)
+  {
+	  Rubro rubro = new Rubro();
+	  for(int i=0; i<lista.size();i++)
+	  { 
+		if (idRubro.equals(lista.get(i).getIdRubro()))
+		   {
+			   rubro = lista.get(i) ;
+			   break;
+		   }
+		if (( rubro!= null ) && (!lista.get(i).getSubrubros().isEmpty()))  
+			{
+				rubro = getRubroByCode(idRubro,lista.get(i).getSubrubros());
+			}
+	  }
+	  return rubro;
+  }
+
+%>
+
 <%
 	List<Rubro> rub = new ArrayList();
 	rub = rubroDB.getRubrosConSubrubros();
         String[] listaIds = null;
-        
         //string of IDS
-       if (request.getParameter("ids") != null){
+        if (request.getParameter("ids") != null){
            String cadena = request.getParameter("ids").toString();
            listaIds = cadena.split("_");
-           session.setAttribute("listaIds", listaIds);
+           List<Rubro> listaRubrosSelec = new ArrayList();
+
+           for (int p=0; p<listaIds.length; p++){
+                Rubro rubro = getRubroByCode(listaIds[p],rub);
+                listaRubrosSelec.add(rubro);
+           } 
+           session.setAttribute("listaRubrosSelec", listaRubrosSelec);
            response.sendRedirect(response.encodeRedirectURL("pantallaDos.jsp"));
-       }
-          
-        
+        }       
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
