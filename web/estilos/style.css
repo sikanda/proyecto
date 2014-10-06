@@ -348,7 +348,7 @@ ul {
 }
 
 
-/* table {
+ .tabla {
   border-collapse: collapse;
   border: 1px solid #666666;
   font: normal 11px verdana, arial, helvetica, sans-serif;
@@ -357,7 +357,7 @@ ul {
   text-align:left;
   font-size: 10pt;
   margin: 0 auto;   
-  }*/
+  }
 caption {
   text-align: center;
   font: bold 16px arial, helvetica, sans-serif;
